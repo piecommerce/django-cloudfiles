@@ -2,6 +2,11 @@ import os
 import sys
 
 
+# Prepend the root dir herein to sys.path so that Django's DiscoverRunner
+# doesn't find the tox-installed cloudfiles before finding the one herein
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+
+
 def main():
     """
     Adds cloudfiles to sys.path, runs tests, exits.
@@ -9,14 +14,9 @@ def main():
     # Add the Django settings module environment variable
     os.environ['DJANGO_SETTINGS_MODULE'] = 'cloudfiles.runtests.settings'
 
-    from django.conf import settings
-    from django.test.utils import get_runner
+    from django.core.management import call_command
 
-    # Get the test runner and run tests, exiting with the status codes set to
-    # the result of the test running (num failures + num errors)
-    TestRunner = get_runner(settings)
-    test_runner = TestRunner()
-    sys.exit(test_runner.run_tests(['cloudfiles']))
+    call_command('test', 'cloudfiles')
 
 
 # When in main

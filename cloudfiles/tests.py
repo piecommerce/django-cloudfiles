@@ -7,5 +7,8 @@ class TestCloudFilesStorage(TestCase):
     """
     Tests for ``CloudFilesStorage`` functionality.
     """
-    def test_foo(self):
+    def test_passing(self):
+        """
+        A simple test that passes.
+        """
         pass
