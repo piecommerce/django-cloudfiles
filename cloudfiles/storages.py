@@ -1,3 +1,5 @@
+import StringIO
+
 import pyrax
 from pyrax.exceptions import (
     AuthenticationFailed,
@@ -5,9 +7,71 @@ from pyrax.exceptions import (
     NoSuchObject
 )
 
+from django.core.files.base import File
 from django.core.files.storage import Storage
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+
+
+class CloudFile(File):
+    """
+    A file that's stored using CloudFilesStorage, providing the ability to
+    read, write the underlying file data.
+    """
+    def __init__(self, stored_object, storage, mode):
+        """
+        Attaches the provided options for later use.
+        """
+        self.stored_object = stored_object
+        self._storage = storage
+        self._mode = mode
+        self.file = StringIO.StringIO(stored_object.get())
+        self._dirty = False
+
+    def seek(self, pos):
+        """
+        Seeks the temp file herein to the given position.
+        """
+        self.file.seek(pos)
+
+    def size(self):
+        """
+        Returns the size, in bytes, of the stored file.
+        """
+        return self.stored_object.total_bytes
+
+    def read(self, *args, **kwargs):
+        """
+        Delegates to the temp file herein's read method.
+        """
+        return self.file.read()
+
+    def write(self, content):
+        """
+        Writes the provided content to the temp file herein and marks the cloud
+        file as dirty, raising an error when the mode doesn't contain a "w".
+        """
+        # Ensure the file was opened for writing
+        if not 'w' in self._mode:
+            raise IOError(u'File not open for writing')
+
+        # Overwrite the temp file with the provided content
+        self.file.truncate(0)
+        self.file.write(content)
+
+        # Mark the cloud file as dirty
+        self._dirty = True
+
+    def close(self):
+        """
+        Stores the changed version of the temp file herein, if it has changed,
+        then closes the temp file.
+        """
+        # If the cloud file is dirty, store it under the original name
+        if self._dirty:
+            self._storage.save(self.name, self.file.getvalue())
+
+        self.file.close()
 
 
 class CloudFilesStorage(Storage):
@@ -79,9 +143,17 @@ class CloudFilesStorage(Storage):
 
     def _save(self, name, content):
         """
-        Stores the file to the attached container under the given name.
+        Stores the file to the attached container under the given name, then
+        returns the name.
         """
-        self.container.store_object(name, content)
+        self.container.store_object(name, content.read())
+        return name
+
+    def _open(self, name, mode='rb'):
+        """
+        Returns a CloudFile instance for the file stored under the given name.
+        """
+        return CloudFile(self.container.get_object(name), self, mode)
 
     def delete(self, name, content):
         """
