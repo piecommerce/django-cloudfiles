@@ -39,10 +39,10 @@ class CloudFilesStorage(DefaultStorage):
 
         # Get credentials
         try:
-            username, api_key = options['region'], options['api_key']
+            username, api_key = options['USERNAME'], options['API_KEY']
         except KeyError:
             raise ImproperlyConfigured(
-                u'username and api_key are both required options'
+                u'USERNAME and API_KEY are both required options'
             )
 
         # Authenticate (accesses network)
@@ -56,18 +56,18 @@ class CloudFilesStorage(DefaultStorage):
 
         # Get the region
         try:
-            region = options['region']
+            region = options['REGION']
         except KeyError:
-            raise ImproperlyConfigured(u'region is a required option')
+            raise ImproperlyConfigured(u'REGION is a required option')
 
         # Attach a cloudfiles connection for the selected region
         self.cloudfiles = pyrax.connect_to_cloudfiles(region=region)
 
         # Get the container name
         try:
-            container = options['container']
+            container = options['CONTAINER']
         except KeyError:
-            raise ImproperlyConfigured(u'container is a required option')
+            raise ImproperlyConfigured(u'CONTAINER is a required option')
 
         # Attach the container
         try:
