@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='cloudfiles',
-    version='0.0.1',  # Modify in __init__.py as well
+    version='0.1.0',  # Modify in __init__.py as well
     url='https://github.com/piecommerce/django-cloudfiles',
     license='BSD',
     description='A (model-less) Django app providing a Rackspace(tm) Cloud '
