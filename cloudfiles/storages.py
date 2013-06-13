@@ -5,12 +5,12 @@ from pyrax.exceptions import (
     NoSuchObject
 )
 
-from django.core.files.storage import DefaultStorage
+from django.core.files.storage import Storage
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 
-class CloudFilesStorage(DefaultStorage):
+class CloudFilesStorage(Storage):
     """
     A Django storage backend that uses Rackspace Cloud Files to store files.
     """
