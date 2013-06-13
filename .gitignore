@@ -4,6 +4,7 @@
 *.egg
 *.egg-info
 *.mo
+.tox*
 
 # Logs and databases #
 ######################

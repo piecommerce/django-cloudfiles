@@ -11,7 +11,7 @@ setup(
     author='piecommerce',
     author_email='michael@piecommerce.com',
     packages=find_packages(where='.'),
-    test_suite='cloudfiles.runtests.runtests.main',
+    test_suite='runtests.runtests.main',
     install_requires=['pyrax==1.4.5'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
