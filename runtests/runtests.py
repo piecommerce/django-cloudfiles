@@ -5,7 +5,7 @@ from django.core.management import call_command
 
 
 # Prepend the top dir herein to sys.path for Django's DiscoverRunner
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__))))
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     """
     # Add the Django settings module environment variable
     os.environ['DJANGO_SETTINGS_MODULE'] = 'runtests.settings'
-    call_command('test', 'cloudfiles_app')
+    call_command('test', 'cloudfiles')
 
 
 # When in main
