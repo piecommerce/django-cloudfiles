@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='cloudfiles',
-    version='0.1.0',  # Modify in __init__.py as well
+    version='0.1.1',  # Modify in __init__.py as well
     url='https://github.com/piecommerce/django-cloudfiles',
     license='BSD',
     description='A (model-less) Django app providing a Rackspace(tm) Cloud '
@@ -12,7 +12,7 @@ setup(
     author_email='michael@piecommerce.com',
     packages=find_packages(where='.'),
     test_suite='runtests.runtests.main',
-    install_requires=['pyrax==1.4.5'],
+    install_requires=['pyrax==1.4.6'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
