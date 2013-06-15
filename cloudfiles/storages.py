@@ -125,7 +125,10 @@ class CloudFilesStorage(Storage):
             raise ImproperlyConfigured(u'REGION is a required option')
 
         # Attach a cloudfiles connection for the selected region
-        self.cloudfiles = pyrax.connect_to_cloudfiles(region=region)
+        self.cloudfiles = pyrax.connect_to_cloudfiles(
+            region=region,
+            public=options.get('PUBLIC', True)
+        )
 
         # Get the container name
         try:
